@@ -1,0 +1,39 @@
+# pour creer un admin 
+
+http://localhost:8080/api/auth/register-admin
+
+
+pour connecter un admin 
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "admin@drivedreal.com",
+  "password": "admin123"
+}
+
+
+==========================================
+
+pour creer un client 
+
+http://localhost:8080/api/auth/register-client
+
+
+{
+  "email": "client@example.com",
+  "password": "client123",
+  "firstName": "Jean",
+  "lastName": "Dupont"
+}
+
+
+
+pour connecter un client 
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "client@example.com",
+  "password": "client123"
+}
