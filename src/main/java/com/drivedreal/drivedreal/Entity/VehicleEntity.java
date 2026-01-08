@@ -1,8 +1,18 @@
-package com.drivedreal.drivedreal;
+package com.drivedreal.drivedreal.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "vehicles")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class VehicleEntity {
 
     @Id
@@ -11,18 +21,20 @@ public class VehicleEntity {
 
     private String brand;
     private String reference;
-    private String vehicles_Type;
-    private String base_price;
+
+    @Column(name = "vehicle_type")
+    private String vehicleType;
+
+    @Column(name = "base_price")
+    private BigDecimal basePrice;
+
+    private String model;
+
     private String description;
-    private String stock_entry_date;
-    private String stock_status;
 
-    public String getType(){
-        return this.vehicles_Type;
-    }
+    @Column(name = "stock_entry_date")
+    private LocalDate stockEntryDate;
 
-    public Float getPrice(){
-        return Float.parseFloat(this.base_price);
-    }
-
+    @Column(name = "stock_status")
+    private String stockStatus;
 }
