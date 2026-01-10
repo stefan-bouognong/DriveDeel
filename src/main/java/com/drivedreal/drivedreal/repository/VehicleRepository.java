@@ -1,7 +1,8 @@
 package com.drivedreal.drivedreal.repository;
 
-import com.drivedreal.drivedreal.entities.Vehicle;
+import com.drivedreal.drivedreal.model.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
-}
+@Repository
+public interface VehicleRepository extends JpaRepository<Vehicle, Long> {}
