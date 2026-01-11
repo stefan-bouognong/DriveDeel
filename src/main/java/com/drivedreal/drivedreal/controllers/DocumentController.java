@@ -1,21 +1,46 @@
 package com.drivedreal.drivedreal.controllers;
 
-import com.drivedreal.drivedreal.services.document.DocumentService;
+import com.drivedreal.drivedreal.domain.document.Document;
+import com.drivedreal.drivedreal.domain.document.HTMLDocument;
+import com.drivedreal.drivedreal.services.client.DocumentClient;
+import com.drivedreal.drivedreal.services.pdf.adapter.PDFDocumentAdapter;
+import com.drivedreal.drivedreal.services.pdf.external.PDFDocument;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/api/documents")
 public class DocumentController {
 
-    private final DocumentService documentService;
+    @GetMapping("/html")
+    public String testHTMLDocument() {
 
-    public DocumentController(DocumentService documentService) {
-        this.documentService = documentService;
+        Document document = new HTMLDocument("<h1>Contrat de location</h1>");
+        DocumentClient client = new DocumentClient();
+
+        client.processDocument(document);
+
+        return "HTML Document processed (check console)";
     }
 
-    @GetMapping("/test-adapter")
-    public String testAdapter() {
-        documentService.testAdapter();
-        return "Adapter pattern tested successfully. Check console logs.";
+    @GetMapping("/pdf")
+    public String testPDFDocument() {
+
+        PDFDocument pdfDocument = new PDFDocument(
+                new byte[]{},
+                "PDF metadata",
+                List.of()
+        );
+
+        Document document = new PDFDocumentAdapter(pdfDocument);
+        DocumentClient client = new DocumentClient();
+
+        client.processDocument(document);
+
+        return "PDF Document processed via Adapter (check console)";
     }
 }
+

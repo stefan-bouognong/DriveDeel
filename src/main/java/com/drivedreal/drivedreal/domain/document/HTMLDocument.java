@@ -1,18 +1,17 @@
 package com.drivedreal.drivedreal.domain.document;
 
-public class HTMLDocument extends Document {
+public class HTMLDocument implements Document {
 
-    private String html_content;
+    private String content;
 
-    public HTMLDocument(String id_document, String document_type, String html_content) {
-        super(id_document, document_type, "HTML");
-        this.html_content = html_content;
+    public HTMLDocument(String content) {
+        this.content = content;
     }
 
     @Override
     public void display() {
         System.out.println("Displaying HTML document:");
-        System.out.println(html_content);
+        System.out.println(content);
     }
 
     @Override
@@ -20,7 +19,9 @@ public class HTMLDocument extends Document {
         System.out.println("Printing HTML document...");
     }
 
-    public String getHtml_content() {
-        return html_content;
+    @Override
+    public void save(String filename) {
+        System.out.println("Saving HTML document as: " + filename);
     }
 }
+

@@ -6,27 +6,24 @@ public class PDFDocument {
 
     private byte[] pdfData;
     private String metadata;
-    private List<String> pages;
+    private List<String> annotations;
 
-    public PDFDocument(byte[] pdfData, String metadata, List<String> pages) {
+    public PDFDocument(byte[] pdfData, String metadata, List<String> annotations) {
         this.pdfData = pdfData;
         this.metadata = metadata;
-        this.pages = pages;
+        this.annotations = annotations;
     }
 
     public void renderPDF() {
         System.out.println("Rendering PDF document using external library...");
     }
 
+    public void printPDF() {
+        System.out.println("Printing PDF document...");
+    }
+
     public void savePDF(String filename) {
         System.out.println("Saving PDF document as: " + filename);
     }
-
-    public void loadPDF(String filename) {
-        System.out.println("Loading PDF document from: " + filename);
-    }
-
-    public void addPage(String page) {
-        pages.add(page);
-    }
 }
+

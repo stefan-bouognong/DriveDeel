@@ -3,12 +3,11 @@ package com.drivedreal.drivedreal.services.pdf.adapter;
 import com.drivedreal.drivedreal.domain.document.Document;
 import com.drivedreal.drivedreal.services.pdf.external.PDFDocument;
 
-public class PDFDocumentAdapter extends Document {
+public class PDFDocumentAdapter implements Document {
 
     private PDFDocument pdfDocument;
 
-    public PDFDocumentAdapter(String id_document, String document_type, PDFDocument pdfDocument) {
-        super(id_document, document_type, "PDF");
+    public PDFDocumentAdapter(PDFDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
     }
 
@@ -19,13 +18,13 @@ public class PDFDocumentAdapter extends Document {
 
     @Override
     public void print() {
-        pdfDocument.renderPDF();
-        System.out.println("Printing PDF document...");
+        pdfDocument.printPDF();
     }
 
     @Override
-    public void save(String path) {
-        pdfDocument.savePDF(path);
+    public void save(String filename) {
+        pdfDocument.savePDF(filename);
     }
 }
+
 
