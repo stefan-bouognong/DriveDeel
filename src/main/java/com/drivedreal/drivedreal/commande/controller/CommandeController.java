@@ -28,9 +28,14 @@ public class CommandeController {
         return commandeService.findById(id);
     }
 
-    @PostMapping
-    public Commande createCommande(@RequestBody Commande commande) {
-        return commandeService.save(commande);
+    @PostMapping("/comptant")
+    public Commande createComptantCommande(@RequestBody double montantTotal) {
+        return commandeService.createCommandeComptant(montantTotal);
+    }
+
+    @PostMapping("/credit")
+    public Commande createCreditCommande(@RequestBody double montantTotal) {
+        return commandeService.createCommandeCredit(montantTotal);
     }
 
     @DeleteMapping("/{id}")
