@@ -64,5 +64,12 @@ GET http://localhost:8080/api/documents/html
 ### 🔹 Tester un document PDF (Adapter)
 ```
 GET http://localhost:8080/api/documents/pdf
-```
 
+Lorsque tous les tests sont bien lancés dans la console s'affiche:
+Rendering PDF document using external library...
+Printing PDF document...
+Saving PDF document as: document_output.pdf
+Displaying HTML document:
+<h1>Contrat de location</h1>
+Printing HTML document...
+Saving HTML document as: document_output.pdf
