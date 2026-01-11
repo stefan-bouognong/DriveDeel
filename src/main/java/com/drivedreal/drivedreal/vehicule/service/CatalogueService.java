@@ -17,5 +17,9 @@ public class CatalogueService {
     public VehiculeIterator creerIterator() {
         return catalogue.creerIterator();
     }
+
+    public Catalogue getCatalogue() {
+        return catalogue;
+    }
 }
 

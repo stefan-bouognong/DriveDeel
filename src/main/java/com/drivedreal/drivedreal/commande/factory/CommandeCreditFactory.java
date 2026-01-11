@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import com.drivedreal.drivedreal.commande.Commande;
 import com.drivedreal.drivedreal.commande.CommandeCredit;
 
-@Component("credit")
+//@Component("credit")
 public class CommandeCreditFactory implements CommandeFactory {
 
     @Override

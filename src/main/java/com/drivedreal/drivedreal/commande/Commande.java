@@ -1,5 +1,8 @@
 package com.drivedreal.drivedreal.commande;
 
+import com.drivedreal.drivedreal.commande.enums.TypeCommande;
+import com.drivedreal.drivedreal.commande.enums.StatutCommande;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +29,7 @@ public abstract class Commande {
     private String numCommande = "CMD-" + System.currentTimeMillis();
     protected double montantTotal;
     private String typeCommande; // "comptant" or "credit"
+    private String statut = StatutCommande.PENDING.getValue(); // statut as string
 
     public abstract void calculerMontant();
 }
