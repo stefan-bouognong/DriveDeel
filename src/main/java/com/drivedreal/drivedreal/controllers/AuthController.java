@@ -4,6 +4,8 @@ import com.drivedreal.drivedreal.dto.AuthRequest;
 import com.drivedreal.drivedreal.dto.AuthResponse;
 import com.drivedreal.drivedreal.entity.Role;
 import com.drivedreal.drivedreal.entity.User;
+import java.io.FileWriter;
+import java.io.IOException;
 import com.drivedreal.drivedreal.repository.UserRepository;
 import com.drivedreal.drivedreal.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,15 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+
+    // #region agent log
+    private void logDebug(String message, Object data, String hypothesisId) {
+        try (FileWriter fw = new FileWriter("c:\\Users\\LaVue\\Desktop\\dev\\java\\DriveDeel\\.cursor\\debug.log", true)) {
+            fw.write(String.format("{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"%s\",\"location\":\"AuthController.java:%d\",\"message\":\"%s\",\"data\":%s,\"timestamp\":%d}\n",
+                     hypothesisId, new Throwable().getStackTrace()[1].getLineNumber(), message, data != null ? data.toString() : "null", System.currentTimeMillis()));
+        } catch (IOException e) { /* ignore */ }
+    }
+    // #endregion
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
@@ -45,6 +56,9 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Admin existe déjà");
         }
 
+        // #region agent log
+        logDebug("Attempting to build admin user", null, "A");
+        // #endregion
         User admin = User.builder()
                 .email("admin@drivedreal.com")
                 .password(passwordEncoder.encode("admin123"))
@@ -52,6 +66,9 @@ public class AuthController {
                 .lastName("System")
                 .role(Role.ADMIN)
                 .build();
+        // #region agent log
+        logDebug("Admin user built: " + admin.getEmail(), null, "A");
+        // #endregion
 
         userRepository.save(admin);
         return ResponseEntity.ok("Admin créé avec succès");
@@ -64,6 +81,9 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Client existe déjà");
         }
 
+        // #region agent log
+        logDebug("Attempting to build client user", request, "A");
+        // #endregion
         User client = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -71,6 +91,9 @@ public class AuthController {
                 .lastName(request.getLastName())
                 .role(Role.CLIENT)
                 .build();
+        // #region agent log
+        logDebug("Client user built: " + client.getEmail(), null, "A");
+        // #endregion
 
         userRepository.save(client);
         System.out.println("Client créé : " + client.getEmail());

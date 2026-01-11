@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +38,17 @@ public class User implements UserDetails {
     private Role role;
 
     // Pour les sociétés (optionnel)
-    private boolean isCompany;
+    @Column(name = "is_customer_company", nullable = false)
+    private boolean isCustomerCompany;
+
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Company company; 
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Client client;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
