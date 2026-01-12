@@ -37,3 +37,70 @@ http://localhost:8080/api/auth/login
   "email": "client@example.com",
   "password": "client123"
 }
+
+
+pour le patron factory method 
+
+on cree une commande avec:
+
+POST http://localhost:8080/api/orders
+
+SIMPLE OU FLEET
+{
+  "orderType": "SIMPLE",
+  "items": [
+    { "vehicleId": 1, "quantity": 1 }
+  ]
+}
+
+
+resultat 
+
+{
+	"orderDate": "2026-01-10",
+	"orderId": 5,
+	"status": "CREATED",
+	"totalAmount": 45000.0
+}
+
+
+on avance le status de la commande avec 
+
+PATCH http://localhost:8080/api/orders/4/advance
+{
+  "orderType": "SIMPLE",
+  "items": [
+    { "vehicleId": 1, "quantity": 1 }
+  ]
+}
+
+
+resultat
+
+{
+	"orderDate": "2026-01-10",
+	"orderId": 4,
+	"status": "VALIDATED",
+	"totalAmount": 45000.0
+}
+
+
+on avance ENCORE le status de la commande avec 
+
+PATCH http://localhost:8080/api/orders/4/advance
+{
+  "orderType": "SIMPLE",
+  "items": [
+    { "vehicleId": 1, "quantity": 1 }
+  ]
+}
+
+
+resultat
+
+{
+	"orderDate": "2026-01-10",
+	"orderId": 4,
+	"status": "DELIVERED",
+	"totalAmount": 45000.0
+}

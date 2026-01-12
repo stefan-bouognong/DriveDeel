@@ -79,7 +79,7 @@ public class Company implements CompanyComposite {
     public double getTotalAmount() {
         double total = 0;
         for (Order order : orders) {
-            total += order.getAmount();
+            total += order.getTotalAmount();
         }
         for (Company child : children) {
             total += child.getTotalAmount();

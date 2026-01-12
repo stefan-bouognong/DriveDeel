@@ -1,4 +1,4 @@
-package com.drivedreal.drivedreal.Entity;
+package com.drivedreal.drivedreal.entity;
 
 public enum EngineType {
     ELECTRIC,

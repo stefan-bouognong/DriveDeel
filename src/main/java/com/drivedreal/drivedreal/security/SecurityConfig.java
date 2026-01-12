@@ -27,10 +27,15 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+
                 .requestMatchers("/api/auth/**", "/api/companies/register", "/api/users/**", "/api/catalogues/**").permitAll()
                 // .requestMatchers("/api/vehicles/**").permitAll()
                 .requestMatchers("/api/companies/**").permitAll()
                 .requestMatchers("/api/clients/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/vehicles/**").permitAll()
+                .requestMatchers("/formulaire/**").permitAll()
+                .requestMatchers("/api/orders/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
