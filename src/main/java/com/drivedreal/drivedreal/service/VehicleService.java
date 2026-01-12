@@ -1,4 +1,4 @@
-package com.drivedreal.drivedreal.services;
+package com.drivedreal.drivedreal.service;
 
 import com.drivedreal.drivedreal.repository.CatalogueRepository;
 import com.drivedreal.drivedreal.entity.Catalogue;

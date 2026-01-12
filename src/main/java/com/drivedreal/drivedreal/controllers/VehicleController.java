@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import com.drivedreal.drivedreal.dto.VehicleCreateRequest;
 import com.drivedreal.drivedreal.entity.VehicleEntity;
-import com.drivedreal.drivedreal.services.VehicleService;
+import com.drivedreal.drivedreal.service.VehicleService;
 
 import java.util.List;
 
