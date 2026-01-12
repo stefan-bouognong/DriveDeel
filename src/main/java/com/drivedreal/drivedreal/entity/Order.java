@@ -1,10 +1,24 @@
+// entity/Order.java
 package com.drivedreal.drivedreal.entity;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import com.drivedreal.drivedreal.enums.OrderStatus;
 import com.drivedreal.drivedreal.enums.OrderType;
-import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
@@ -23,6 +37,11 @@ public class Order {
     private OrderType type;
 
     private double totalAmount;
+
+    // ✅ LIAISON AVEC USER
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
@@ -53,6 +72,10 @@ public class Order {
         return items;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     /* ===== SETTERS ===== */
 
     public void setOrderDate(LocalDate orderDate) {
@@ -73,5 +96,9 @@ public class Order {
 
     public void setItems(List<OrderItem> items) {
         this.items = items;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
