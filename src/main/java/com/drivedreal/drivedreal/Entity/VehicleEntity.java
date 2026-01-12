@@ -1,5 +1,8 @@
 package com.drivedreal.drivedreal.entity;
 
+import com.drivedreal.drivedreal.domain.vehicle.PropulsionType;
+import com.drivedreal.drivedreal.domain.vehicle.VehicleType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +25,11 @@ public class VehicleEntity {
     private String brand;
     private String reference;
 
-    @Column(name = "vehicle_type")
-    private String vehicleType;
+    @Enumerated(EnumType.STRING)
+    private VehicleType vehicleType;
+
+    @Enumerated(EnumType.STRING)
+    private PropulsionType propulsionType;
 
     @Column(name = "base_price")
     private BigDecimal basePrice;
@@ -37,4 +43,9 @@ public class VehicleEntity {
 
     @Column(name = "stock_status")
     private String stockStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalogue_id", nullable = false)
+    @JsonBackReference
+    private Catalogue catalogue;
 }

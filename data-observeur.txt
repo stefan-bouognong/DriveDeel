@@ -1,0 +1,157 @@
+ ==========================================
+ TEST DES FONCTIONNALITÉS OBSERVATEUR (CATALOGUE)
+ ==========================================
+
+ Étape 0: Prérequis
+ Créez un catalogue (par exemple, le catalogue par défaut avec l'ID 1 pour correspondre à la logique actuelle dans VehicleService).
+ Vous pouvez créer plusieurs catalogues avec différents noms si vous le souhaitez.
+
+ Création du Catalogue 1 (Default Catalogue)
+ http://localhost:8080/api/catalogues?name=Default%20Catalogue
+
+ Resultat Attendu: Les détails du catalogue créé (notez l'ID du catalogue, il sera utilisé pour lier les véhicules).
+
+ Création du Catalogue 2 (Sports Cars Catalogue)
+http://localhost:8080/api/catalogues?name=Sports%20Cars%20Catalogue
+
+ Resultat Attendu: Les détails du catalogue créé (notez l'ID).
+
+ Création du Catalogue 3 (Economy Cars Catalogue)
+http://localhost:8080/api/catalogues?name=Economy%20Cars%20Catalogue
+
+ Resultat Attendu: Les détails du catalogue créé (notez l'ID).
+
+
+ 1. Créer un compte administrateur (si non déjà fait ou si vous voulez un admin dédié pour ce test)
+http://localhost:8080/api/auth/register-admin
+
+
+ {
+   "email": "admin.cat@drivedreal.com",
+   "password": "adminpassword"
+ }
+
+
+ 2. Se connecter en tant qu'administrateur
+ Récupérez le JWT token de la réponse.
+http://localhost:8080/api/auth/login
+ Content-Type: application/json
+
+ {
+   "email": "admin.cat@drivedreal.com",
+   "password": "adminpassword"
+ }
+
+ Resultat Attendu: Un JWT token dans la réponse.
+ --> Conservez le token pour les requêtes ADMIN suivantes (e.g., JWT_ADMIN_TOKEN)
+
+
+ 3. Créer un compte client (utilisateur)
+ http://localhost:8080/api/auth/register-client
+
+
+ {
+   "email": "client.cat@example.com",
+   "password": "clientpassword",
+   "firstName": "Client",
+   "lastName": "Catalogue"
+ }
+
+ Resultat Attendu: Les détails de l'utilisateur créé.
+ --> Conservez l'ID de l'utilisateur pour les requêtes client suivantes (e.g., CLIENT_USER_ID)
+
+
+ 4. Se connecter en tant que client
+ Récupérez le JWT token de la réponse.
+http://localhost:8080/api/auth/login
+ Content-Type: application/json
+
+ {
+   "email": "client.cat@example.com",
+   "password": "clientpassword"
+ }
+
+ Resultat Attendu: Un JWT token dans la réponse.
+ --> Conservez le token pour les requêtes CLIENT suivantes (e.g., JWT_CLIENT_TOKEN)
+
+
+ 5. S'abonner aux notifications du catalogue (en tant que CLIENT)
+ Remplacez {CLIENT_USER_ID} par l'ID de l'utilisateur client créé.
+http://localhost:8080/api/users/{CLIENT_USER_ID}/subscribeToCatalogue
+ Content-Type: application/json
+ Authorization: Bearer <JWT_CLIENT_TOKEN>
+
+ {}
+
+ Resultat Attendu: Message de succès.
+ --> Vérifiez les logs de débogage pour "Observer added to catalogue"
+
+
+ 6. Ajouter un nouveau véhicule au catalogue (en tant qu'ADMIN)
+ Ceci devrait déclencher les notifications pour les utilisateurs abonnés.
+ Remplacez {CATALOGUE_ID} par l'ID du catalogue souhaité.
+http://localhost:8080/api/vehicles
+ Content-Type: application/json
+ Authorization: Bearer <JWT_ADMIN_TOKEN>
+
+ {
+  "brand": "Tesla",
+   "model": "Model Y",
+  "basePrice": 65000.0,
+  "reference": "TY-001",
+  "description": "SUV électrique performant.",
+  "vehicleType": "AUTOMOBILE",
+  "propulsionType": "ELECTRIC",
+  "catalogueId": 1
+ }
+
+ Resultat Attendu: Les détails du véhicule créé.
+ --> Vérifiez les logs de débogage pour:
+     - "Notifying observers about catalogue update" (du Catalogue)
+     - "User client.cat@example.com notified of catalogue update" (de l'User)
+
+ Ajoutez d'autres véhicules à différents catalogues
+
+ Exemple 1: Ajouter un scooter à essence au Catalogue 1
+http://localhost:8080/api/vehicles
+ Content-Type: application/json
+ Authorization: Bearer <JWT_ADMIN_TOKEN>
+
+ {
+  "brand": "Vespa",
+   "model": "PX 125",
+  "basePrice": 4500.0,
+  "reference": "VP-001",
+ "description": "Scooter classique à essence.",
+  "vehicleType": "SCOOTER",
+  "propulsionType": "GASOLINE",
+  "catalogueId": 1
+ }
+
+ Exemple 2: Ajouter une automobile électrique au Catalogue 2
+http://localhost:8080/api/vehicles
+ Content-Type: application/json
+ Authorization: Bearer <JWT_ADMIN_TOKEN>
+
+ {
+  "brand": "Porsche",
+   "model": "Taycan",
+  "basePrice": 120000.0,
+  "reference": "PT-001",
+  "description": "Voiture de sport électrique.",
+  "vehicleType": "AUTOMOBILE",
+  "propulsionType": "ELECTRIC",
+  "catalogueId": 2
+ }
+
+
+ 7. Se désabonner des notifications du catalogue (en tant que CLIENT)
+ Remplacez {CLIENT_USER_ID} par l'ID de l'utilisateur client.
+http://localhost:8080/api/users/{CLIENT_USER_ID}/unsubscribeFromCatalogue
+ Content-Type: application/json
+ Authorization: Bearer <JWT_CLIENT_TOKEN>
+
+ {}
+
+ Resultat Attendu: Message de succès.
+ --> Vérifiez les logs de débogage pour "Observer removed from catalogue"

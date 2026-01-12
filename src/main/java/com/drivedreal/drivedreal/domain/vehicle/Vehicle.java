@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 
 public interface Vehicle {
 
-    String getType();
     String getDescription();
     BigDecimal getBasePrice();
+    VehicleType getVehicleType();
+    PropulsionType getPropulsionType();
     
 }

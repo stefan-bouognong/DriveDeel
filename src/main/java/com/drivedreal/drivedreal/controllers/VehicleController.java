@@ -1,5 +1,6 @@
 package com.drivedreal.drivedreal.controllers;
 
+import com.drivedreal.drivedreal.domain.vehicle.VehicleType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -20,16 +21,17 @@ public class VehicleController {
     }
 
     // ===== CREATE =====
-    @PostMapping("/automobile")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VehicleEntity createAutomobile(@RequestBody VehicleCreateRequest request) {
-        return vehicleService.createAutomobile(request);
-    }
-
-    @PostMapping("/scooter")
-    @ResponseStatus(HttpStatus.CREATED)
-    public VehicleEntity createScooter(@RequestBody VehicleCreateRequest request) {
-        return vehicleService.createScooter(request);
+    public VehicleEntity createVehicle(@RequestBody VehicleCreateRequest request) {
+        switch (request.getVehicleType()) {
+            case AUTOMOBILE:
+                return vehicleService.createAutomobile(request);
+            case SCOOTER:
+                return vehicleService.createScooter(request);
+            default:
+                throw new IllegalArgumentException("Type de véhicule non pris en charge.");
+        }
     }
 
     // ===== READ =====

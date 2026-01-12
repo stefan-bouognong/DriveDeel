@@ -14,11 +14,6 @@ public class GasolineScooter implements Vehicle {
     }
 
     @Override
-    public String getType() {
-        return "Scooter Essence";
-    }
-
-    @Override
     public String getDescription() {
         return brand + " " + model + " (Essence)";
     }
@@ -26,5 +21,15 @@ public class GasolineScooter implements Vehicle {
     @Override
     public BigDecimal getBasePrice() {
         return basePrice;
+    }
+
+    @Override
+    public VehicleType getVehicleType() {
+        return VehicleType.SCOOTER;
+    }
+
+    @Override
+    public PropulsionType getPropulsionType() {
+        return PropulsionType.GASOLINE;
     }
 }

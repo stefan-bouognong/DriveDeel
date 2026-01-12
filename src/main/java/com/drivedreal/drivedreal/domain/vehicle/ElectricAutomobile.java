@@ -14,11 +14,6 @@ public class ElectricAutomobile implements Vehicle {
     }
 
     @Override
-    public String getType() {
-        return "Automobile Électrique";
-    }
-
-    @Override
     public String getDescription() {
         return brand + " " + model + " (Électrique)";
     }
@@ -26,5 +21,15 @@ public class ElectricAutomobile implements Vehicle {
     @Override
     public BigDecimal getBasePrice() {
         return basePrice;
+    }
+
+    @Override
+    public VehicleType getVehicleType() {
+        return VehicleType.AUTOMOBILE;
+    }
+
+    @Override
+    public PropulsionType getPropulsionType() {
+        return PropulsionType.ELECTRIC;
     }
 }

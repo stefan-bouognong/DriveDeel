@@ -1,11 +1,19 @@
 package com.drivedreal.drivedreal.services;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.drivedreal.drivedreal.repository.CatalogueRepository;
+import com.drivedreal.drivedreal.entity.Catalogue;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import com.drivedreal.drivedreal.domain.vehicle.PropulsionType;
+import com.drivedreal.drivedreal.domain.vehicle.factory.ElectricVehicleFactory;
+import com.drivedreal.drivedreal.domain.vehicle.factory.GasolineVehicleFactory;
+import com.drivedreal.drivedreal.domain.vehicle.factory.VehicleFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.drivedreal.drivedreal.entity.VehicleEntity;
 import com.drivedreal.drivedreal.domain.vehicle.Vehicle;
-import com.drivedreal.drivedreal.domain.vehicle.factory.VehicleFactory;
 import com.drivedreal.drivedreal.dto.VehicleCreateRequest;
 import com.drivedreal.drivedreal.repository.VehicleRepository;
 
@@ -13,46 +21,71 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class VehicleService {
 
-    private final VehicleFactory vehicleFactory;
+    private final GasolineVehicleFactory gasolineVehicleFactory;
+    private final ElectricVehicleFactory electricVehicleFactory;
     private final VehicleRepository vehicleRepository;
-
-    public VehicleService(@Qualifier("electricVehicleFactory") VehicleFactory vehicleFactory,
-                          VehicleRepository vehicleRepository) {
-        this.vehicleFactory = vehicleFactory;
-        this.vehicleRepository = vehicleRepository;
-    }
+    private final CatalogueRepository catalogueRepository;
 
     // ===== CREATE =====
     public VehicleEntity createAutomobile(VehicleCreateRequest request) {
-        Vehicle vehicle = vehicleFactory.createAutomobile(
+        Catalogue catalogue = catalogueRepository.findById(request.getCatalogueId())
+                .orElseThrow(() -> new IllegalArgumentException("Catalogue non trouvé."));
+
+        VehicleFactory factory;
+        if (request.getPropulsionType() == PropulsionType.ELECTRIC) {
+            factory = electricVehicleFactory;
+        } else {
+            factory = gasolineVehicleFactory;
+        }
+        Vehicle vehicle = factory.createAutomobile(
                 request.getBrand(),
                 request.getModel(),
                 request.getBasePrice()
         );
-        return mapToEntity(vehicle, request);
+        VehicleEntity savedVehicle = vehicleRepository.save(mapToEntity(vehicle, request, catalogue));
+        catalogue.addVehicle(savedVehicle);
+        catalogueRepository.save(catalogue);
+        catalogue.notifyObservers("Nouveau véhicule ajouté au catalogue: " + savedVehicle.getBrand() + " " + savedVehicle.getModel());
+        return savedVehicle;
     }
 
     public VehicleEntity createScooter(VehicleCreateRequest request) {
-        Vehicle vehicle = vehicleFactory.createScooter(
+        Catalogue catalogue = catalogueRepository.findById(request.getCatalogueId())
+                .orElseThrow(() -> new IllegalArgumentException("Catalogue non trouvé."));
+
+        VehicleFactory factory;
+        if (request.getPropulsionType() == PropulsionType.ELECTRIC) {
+            factory = electricVehicleFactory;
+        } else {
+            factory = gasolineVehicleFactory;
+        }
+        Vehicle vehicle = factory.createScooter(
                 request.getBrand(),
                 request.getModel(),
                 request.getBasePrice()
         );
-        return mapToEntity(vehicle, request);
+        VehicleEntity savedVehicle = vehicleRepository.save(mapToEntity(vehicle, request, catalogue));
+        catalogue.addVehicle(savedVehicle);
+        catalogueRepository.save(catalogue);
+        catalogue.notifyObservers("Nouveau véhicule ajouté au catalogue: " + savedVehicle.getBrand() + " " + savedVehicle.getModel());
+        return savedVehicle;
     }
 
     // Méthode privée pour mapper DTO + objet métier → Entity
-    private VehicleEntity mapToEntity(Vehicle vehicle, VehicleCreateRequest request) {
+    private VehicleEntity mapToEntity(Vehicle vehicle, VehicleCreateRequest request, Catalogue catalogue) {
         return VehicleEntity.builder()
                 .brand(request.getBrand())
                 .reference(request.getReference())
-                .vehicleType(vehicle.getType())
+                .vehicleType(vehicle.getVehicleType())
+                .propulsionType(vehicle.getPropulsionType())
                 .description(request.getDescription())
                 .basePrice(request.getBasePrice())
                 .stockEntryDate(LocalDate.now())
                 .stockStatus("IN_STOCK")
+                .catalogue(catalogue)
                 .build();
     }
 
@@ -80,4 +113,13 @@ public class VehicleService {
     public void deleteVehicle(Long id) {
         vehicleRepository.deleteById(id);
     }
+
+    // #region agent log
+    private void logDebug(String message, Object data, String hypothesisId) {
+        try (FileWriter fw = new FileWriter("c:\\Users\\LaVue\\Desktop\\dev\\java\\DriveDeel\\.cursor\\debug.log", true)) {
+            fw.write(String.format("{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"%s\",\"location\":\"VehicleService.java:%d\",\"message\":\"%s\",\"data\":%s,\"timestamp\":%d}\n",
+                     hypothesisId, new Throwable().getStackTrace()[1].getLineNumber(), message, data != null ? data.toString() : "null", System.currentTimeMillis()));
+        } catch (IOException e) { /* ignore */ }
+    }
+    // #endregion
 }
