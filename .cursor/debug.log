@@ -480,3 +480,5 @@
 {"sessionId":"debug-session","runId":"run1","hypothesisId":"B","location":"DrivedrealApplication.java:23","message":"DrivedrealApplication main finished","data":null,"timestamp":1768193424198}
 {"sessionId":"debug-session","runId":"run1","hypothesisId":"F","location":"Catalogue.java:69","message":"Notifying observers about catalogue update: Nouveau véhicule ajouté au catalogue: Vespa null","data":null,"timestamp":1768193442228}
 {"sessionId":"debug-session","runId":"run1","hypothesisId":"F","location":"User.java:102","message":"User client.cat@example.com notified of catalogue update: Nouveau véhicule ajouté au catalogue: Vespa null","data":null,"timestamp":1768193442229}
+{"sessionId":"debug-session","runId":"run1","hypothesisId":"B","location":"DrivedrealApplication.java:21","message":"DrivedrealApplication main started","data":null,"timestamp":1768193478503}
+{"sessionId":"debug-session","runId":"run1","hypothesisId":"B","location":"DrivedrealApplication.java:23","message":"DrivedrealApplication main finished","data":null,"timestamp":1768193480078}
